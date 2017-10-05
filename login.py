@@ -4,10 +4,14 @@ app = Flask(__name__)
 app.secret_key = 'THE TING GO SKRRRA PA PA KA KA KA'
 
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def root():
-    if 'user' in session:
+    if 'logout' in request.form:
+        session.pop('user')
+        session.pop('pass')
+    elif 'user' in session:
         return redirect('/welcome')
+
     return render_template('login.html')
 
 @app.route('/welcome', methods=['GET','POST'])
@@ -18,7 +22,7 @@ def welcome():
             return 'you stupid: go to root'
         elif request.form['username'] != u'':
             enteredUser = request.form['username']
-            print repr(enteredUser)
+            #print repr(enteredUser)
         else:
             return 'you stupid: no user'
     
@@ -31,9 +35,8 @@ def welcome():
             return 'you stupid: no pass'
         session['user'] = enteredUser
         session['pass'] = enteredPass
-        return 'hi! First time!'
-    else:
-        return 'Hi ' + session['user'] + '!'
+
+    return render_template('welcome.html',name=session['user'])
 
 if __name__ == '__main__':
     app.debug = True
