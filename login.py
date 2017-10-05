@@ -18,21 +18,17 @@ def root():
 def welcome():
 
     if 'user' not in session:
-        if 'username' not in request.form:
-            return 'you stupid: go to root'
-        elif request.form['username'] != u'':
+        if 'username' not in request.form or request.form['username'] == u'':
+            return render_template('error.html', err='username')
+        else:
             enteredUser = request.form['username']
-            #print repr(enteredUser)
+            # print repr(enteredUser)
+
+        if 'pass' not in request.form or request.form['pass'] == u'':
+            return render_template('error.html', err='password')
         else:
-            return 'you stupid: no user'
-    
-        if 'pass' not in request.form:
-            return 'you stupid: go to root'
-        elif request.form['pass'] != u'':
             enteredPass = request.form['pass']
-            print enteredPass
-        else:
-            return 'you stupid: no pass'
+            # print enteredPass
         session['user'] = enteredUser
         session['pass'] = enteredPass
 
